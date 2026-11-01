@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Buses</title>
+</head>
+<body>
+    <h1>Available Buses</h1>
+
+    {% if buses %}
+        {% for bus in buses %}
+        <div style="border:1px solid #ccc; padding:15px; margin:15px;">
+            <h3>{{ bus.bus_name }}</h3>
+            <p>From: {{ bus.source }}</p>
+            <p>To: {{ bus.destination }}</p>
+            <p>Date: {{ bus.journey_date }}</p>
+            <p>Available Seats: {{ bus.available_seats }}</p>
+            <p>Price per Seat: ₹{{ bus.price }}</p>
+
+            <form action="/book" method="POST">
+                <input type="hidden" name="bus_id" value="{{ bus.id }}">
+                <input type="text" name="passenger_name"
+                       placeholder="Passenger Name" required>
+                <input type="number" name="seats"
+                       min="1" max="{{ bus.available_seats }}"
+                       placeholder="Number of Seats" required>
+                <button type="submit">Book Ticket</button>
+            </form>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No buses available for this route and date.</p>
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

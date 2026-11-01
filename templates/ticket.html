@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bus Ticket Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            text-align: center;
+            padding: 40px;
+        }
+        .ticket {
+            background: white;
+            max-width: 450px;
+            margin: auto;
+            padding: 30px;
+            border: 2px dashed #2563eb;
+            border-radius: 15px;
+        }
+        h1 {
+            color: #15803d;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <h1>Booking Successful!</h1>
+        <h2>Digital Bus Ticket</h2>
+        <p>Your ticket has been booked successfully.</p>
+
+        <h3>Ticket ID</h3>
+        <h2>{{ ticket_id }}</h2>
+
+        <p>Please save your Ticket ID for future reference.</p>
+        <button onclick="window.print()">Print Ticket</button>
+        <br><br>
+        <a href="/">Book Another Ticket</a>
+    </div>
+</body>
+</html>
