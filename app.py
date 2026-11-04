@@ -1,17 +1,10 @@
 
 from flask import Flask, render_template, request
-from database import get_connection, create_tables
+from database import get_connection
 from booking import book_ticket
 from datetime import date
 
 app = Flask(__name__)
-
-# Create database tables
-try:
-    create_tables()
-    print("Database connected successfully!")
-except Exception as e:
-    print("Database connection error:", e)
 
 
 # Home page
@@ -21,7 +14,6 @@ def home():
 
 
 # Search buses
-
 @app.route("/search", methods=["POST"])
 def search_buses():
     source = request.form.get("source", "").strip()
@@ -46,6 +38,7 @@ def search_buses():
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
+
         print("SOURCE:", source)
         print("DESTINATION:", destination)
         print("DATE:", journey_date)
@@ -88,17 +81,27 @@ def book():
     if not passenger_name or not bus_id or not seats:
         return "Invalid booking details.", 400
 
-    success, result = book_ticket(
-        passenger_name, bus_id, seats
-    )
-
-    if success:
-        return render_template(
-            "ticket.html", ticket_id=result
+    try:
+        success, result = book_ticket(
+            passenger_name, bus_id, seats
         )
 
-    return f"Booking failed: {result}", 400
+        if success:
+            return render_template(
+                "ticket.html",
+                ticket_id=result
+            )
+
+        return f"Booking failed: {result}", 400
+
+    except Exception as e:
+        print("Booking error:", e)
+        return "Unable to complete booking. Please try again.", 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )
